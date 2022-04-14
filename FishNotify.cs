@@ -1,5 +1,7 @@
 ﻿using Dalamud.Data;
+using Dalamud.Game.Gui;
 using Dalamud.Game.Network;
+using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Interface.Colors;
 using Dalamud.IoC;
 using Dalamud.Logging;
@@ -20,18 +22,27 @@ namespace FishNotify
 
         [PluginService]
         [RequiredVersion("1.0")]
-        private DalamudPluginInterface PluginInterface { get; set; }
+        private DalamudPluginInterface PluginInterface { get; set; } = null!;
 
         [PluginService]
-        private GameNetwork Network { get; set; }
+        private GameNetwork Network { get; set; } = null!;
+
+        [PluginService]
+        public static ChatGui Chat { get; set; } = null!;
+
+        private Configuration configuration;
         private bool settingsVisible;
         private int expectedOpCode = -1;
+        private uint fishCount = 0;
 
         public FishNotifyPlugin()
         {
-            Network!.NetworkMessage += OnNetworkMessage;
-            PluginInterface!.UiBuilder.Draw += OnDrawUI;
-            PluginInterface!.UiBuilder.OpenConfigUi += OnOpenConfigUi;
+            configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+            configuration.Initialize(PluginInterface);
+
+            Network.NetworkMessage += OnNetworkMessage;
+            PluginInterface.UiBuilder.Draw += OnDrawUI;
+            PluginInterface.UiBuilder.OpenConfigUi += OnOpenConfigUi;
 
             var client = new HttpClient();
             client.GetStringAsync("https://raw.githubusercontent.com/karashiiro/FFXIVOpcodes/master/opcodes.min.json")
@@ -41,7 +52,7 @@ namespace FishNotify
         public void Dispose()
         {
             Network.NetworkMessage -= OnNetworkMessage;
-            PluginInterface!.UiBuilder.Draw -= OnDrawUI;
+            PluginInterface.UiBuilder.Draw -= OnDrawUI;
             PluginInterface.UiBuilder.OpenConfigUi -= OnOpenConfigUi;
         }
 
@@ -63,7 +74,7 @@ namespace FishNotify
                     return;
                 }
 
-                if (!region.Lists.TryGetValue("ServerZoneIpcType", out List<OpcodeList> serverZoneIpcTypes))
+                if (!region.Lists.TryGetValue("ServerZoneIpcType", out List<OpcodeList>? serverZoneIpcTypes) || serverZoneIpcTypes == null)
                 {
                     PluginLog.Warning("No ServerZoneIpcType in opcode list");
                     return;
@@ -110,23 +121,49 @@ namespace FishNotify
 
                 case 0x124:
                     // light tug (!)
+                    ++fishCount;
                     Sounds.PlaySound(Resources.Info);
+                    SendChatAlert("light");
                     break;
 
                 case 0x125:
                     // medium tug (!!)
+                    ++fishCount;
                     Sounds.PlaySound(Resources.Alert);
+                    SendChatAlert("medium");
                     break;
 
                 case 0x126:
                     // heavy tug (!!!)
+                    ++fishCount;
                     Sounds.PlaySound(Resources.Alarm);
+                    SendChatAlert("heavy");
                     break;
 
                 default:
                     Sounds.Stop();
                     break;
             }
+        }
+
+        private void SendChatAlert(string size)
+        {
+            if (!configuration.ChatAlerts)
+            {
+                return;
+            }
+
+            SeString message = new SeStringBuilder()
+                .AddUiForeground(514)
+                .Append("[FishNotify]")
+                .AddUiForegroundOff()
+                .Append($" You hook a fish with a ")
+                .AddUiForeground(514)
+                .Append(size)
+                .AddUiForegroundOff()
+                .Append(" bite.")
+                .Build();
+            Chat.Print(message);
         }
 
         private void OnDrawUI()
@@ -136,13 +173,21 @@ namespace FishNotify
 
             if (ImGui.Begin("FishNotify", ref this.settingsVisible, ImGuiWindowFlags.AlwaysAutoResize))
             {
+                var chatAlerts = configuration.ChatAlerts;
+                if (ImGui.Checkbox("Show chat message on hooking a fish", ref chatAlerts))
+                {
+                    configuration.ChatAlerts = chatAlerts;
+                    configuration.Save();
+                }
+
                 if (expectedOpCode > -1)
-                    ImGui.TextColored(ImGuiColors.HealerGreen, $"Status: OK, opcode = {expectedOpCode:X}");
+                    ImGui.TextColored(ImGuiColors.HealerGreen, $"Status: {(fishCount == 0 ? "Unknown (not triggered yet)" : $"OK ({fishCount} fish hooked)")}, opcode = {expectedOpCode:X}");
                 else
                     ImGui.TextColored(ImGuiColors.DalamudRed, "Status: No opcode :(");
             }
             ImGui.End();
         }
+
         private void OnOpenConfigUi()
         {
             settingsVisible = !settingsVisible;
@@ -151,14 +196,14 @@ namespace FishNotify
 
     public class OpcodeRegion
     {
-        public string Version { get; set; }
-        public string Region { get; set; }
-        public Dictionary<string, List<OpcodeList>> Lists { get; set; }
+        public string? Version { get; set; }
+        public string? Region { get; set; }
+        public Dictionary<string, List<OpcodeList>>? Lists { get; set; }
     }
 
     public class OpcodeList
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public ushort Opcode { get; set; }
     }
 }

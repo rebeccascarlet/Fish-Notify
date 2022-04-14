@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Authors></Authors>
     <Company></Company>
-    <Version>3.0.0.0</Version>
+    <Version>3.1.0.0</Version>
     <Description>Plays a sound effect when a fish bites</Description>
     <Copyright></Copyright>
     <PackageProjectUrl>https://github.com/carvelli/Fish-Notify</PackageProjectUrl>
