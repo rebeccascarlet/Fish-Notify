@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29709.97
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{DFE2B530-7D7B-41FD-B03C-8E11371610E3}") = "FishNotify", "FishNotify.csproj", "{3F91A6A9-5F97-4F6D-864C-DA066F94121A}"
 EndProject

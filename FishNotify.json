@@ -4,9 +4,9 @@
     "Punchline": "Plays a sound when a fish is caught",
     "Description": "Plays a sound when a fish is caught, depending on tug-strength",
     "InternalName": "FishNotify",
-    "DalamudApiLevel": 7,
+    "DalamudApiLevel": 9,
     "Tags": [
         "fishing"
     ],
-    "RepoUrl": "https://github.com/carvelli/Fish-Notify"
+    "RepoUrl": "https://github.com/rebeccascarlet/Fish-Notify"
 }

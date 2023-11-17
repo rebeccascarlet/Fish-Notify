@@ -6,6 +6,7 @@ using Dalamud.Interface.Colors;
 using Dalamud.IoC;
 using Dalamud.Logging;
 using Dalamud.Plugin;
+using Dalamud.Plugin.Services;
 using ImGuiNET;
 using Newtonsoft.Json;
 using System;
@@ -25,10 +26,13 @@ namespace FishNotify
         private DalamudPluginInterface PluginInterface { get; set; } = null!;
 
         [PluginService]
-        private GameNetwork Network { get; set; } = null!;
+        private IGameNetwork Network { get; set; } = null!;
 
         [PluginService]
-        public static ChatGui Chat { get; set; } = null!;
+        public static IChatGui Chat { get; set; } = null!;
+
+        [PluginService]
+        private IPluginLog PluginLog { get; set; } = null!;
 
         private Configuration configuration;
         private bool settingsVisible;
@@ -52,6 +56,7 @@ namespace FishNotify
         public void Dispose()
         {
             Network.NetworkMessage -= OnNetworkMessage;
+            
             PluginInterface.UiBuilder.Draw -= OnDrawUI;
             PluginInterface.UiBuilder.OpenConfigUi -= OnOpenConfigUi;
         }
