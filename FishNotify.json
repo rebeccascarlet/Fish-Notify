@@ -8,5 +8,8 @@
     "Tags": [
         "fishing"
     ],
-    "RepoUrl": "https://github.com/rebeccascarlet/Fish-Notify"
+    "RepoUrl": "https://github.com/rebeccascarlet/Fish-Notify",
+    "DownloadLinkInstall": "https://github.com/rebeccascarlet/Fish-Notify/releases/download/4.0.1/latest.zip",
+    "DownloadLinkTesting": "https://github.com/rebeccascarlet/Fish-Notify/releases/download/4.0.1/latest.zip",
+    "DownloadLinkUpdate": "https://github.com/rebeccascarlet/Fish-Notify/releases/download/4.0.1/latest.zip"
 }
