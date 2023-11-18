@@ -15,8 +15,7 @@
     "CanUnloadAsync": false,
     "LoadPriority": 0,
     "Punchline": "Plays a sound when a fish is caught",
-    "AcceptsFeedback": true
-    "RepoUrl": "https://github.com/rebeccascarlet/Fish-Notify",
+    "AcceptsFeedback": true,
     "DownloadLinkInstall": "https://github.com/rebeccascarlet/Fish-Notify/releases/download/4.0.1/latest.zip",
     "DownloadLinkTesting": "https://github.com/rebeccascarlet/Fish-Notify/releases/download/4.0.1/latest.zip",
     "DownloadLinkUpdate": "https://github.com/rebeccascarlet/Fish-Notify/releases/download/4.0.1/latest.zip"
