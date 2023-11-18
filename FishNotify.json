@@ -1,13 +1,21 @@
 {
     "Author": "Liza Carvelli",
     "Name": "Fish Notify",
-    "Punchline": "Plays a sound when a fish is caught",
-    "Description": "Plays a sound when a fish is caught, depending on tug-strength",
     "InternalName": "FishNotify",
-    "DalamudApiLevel": 9,
+    "AssemblyVersion": "4.0.1.0",
+    "Description": "Plays a sound when a fish is caught, depending on tug-strength",
+    "ApplicableVersion": "any",
+    "RepoUrl": "https://github.com/rebeccascarlet/Fish-Notify",
     "Tags": [
         "fishing"
     ],
+    "DalamudApiLevel": 9,
+    "LoadRequiredState": 0,
+    "LoadSync": false,
+    "CanUnloadAsync": false,
+    "LoadPriority": 0,
+    "Punchline": "Plays a sound when a fish is caught",
+    "AcceptsFeedback": true
     "RepoUrl": "https://github.com/rebeccascarlet/Fish-Notify",
     "DownloadLinkInstall": "https://github.com/rebeccascarlet/Fish-Notify/releases/download/4.0.1/latest.zip",
     "DownloadLinkTesting": "https://github.com/rebeccascarlet/Fish-Notify/releases/download/4.0.1/latest.zip",
